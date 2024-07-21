@@ -36,7 +36,7 @@ namespace ColorTag
                 }
                 catch (Exception ex)
                 {
-                    Log.Error(ex);
+                    //Log.Error(ex);
                     NowColor = 0;
                 }
             }
