@@ -115,7 +115,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AddColor.cs" />
+    <Compile Include="Commands\ColorAdd.cs" />
+    <Compile Include="Commands\ColorHelp.cs" />
+    <Compile Include="Commands\Parent.cs" />
+    <Compile Include="Commands\ColorRemove.cs" />
+    <Compile Include="Commands\Constructor.cs" />
+    <Compile Include="Commands\ColorSet.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Plugin.cs" />
