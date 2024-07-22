@@ -24,12 +24,17 @@ namespace ColorTag.Commands
                 response = "You dont have permissions";
                 return false;
             }
-            if (!Extensions.GetPlayer(player.UserId, out PlayerInfo infoadd))
+            if (!Extensions.GetPlayer(player.UserId, out PlayerInfo info))
             {
                 response = "Your settings were not found, please use the (colortag set (colors)) command";
                 return false;
             }
-            List<string> alreadyUsedColors = infoadd.colors;
+            if(info.colors.Count + arguments.Count > Plugin.plugin.Config.MaxColorLemit)
+            {
+                response = $"Max colors count: {Plugin.plugin.Config.MaxColorLemit}";
+                return false;
+            }
+            List<string> alreadyUsedColors = info.colors;
             for (int i = 0; i < arguments.Count; i++)
             {
                 if (!AvailableColors.Contains(arguments.At(i)))
@@ -47,8 +52,8 @@ namespace ColorTag.Commands
             {
                 Text += $"{s} ";
             }
-            infoadd.colors = alreadyUsedColors;
-            Extensions.PlayerInfoCollection.Update(infoadd);
+            info.colors = alreadyUsedColors;
+            Extensions.PlayerInfoCollection.Update(info);
             response = $"Your colors updated!\nColors: {Text}";
             return true;
         }

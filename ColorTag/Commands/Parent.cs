@@ -22,7 +22,8 @@ namespace ColorTag.Commands
             Constructor constructor = Constructor;
 
             RegisterCommand(constructor.Add);
-            //RegisterCommand(constructor.Help);
+            RegisterCommand(constructor.check);
+            RegisterCommand(constructor.delete);
             RegisterCommand(constructor.Remove);
             RegisterCommand(constructor.Set);
         }
@@ -35,7 +36,7 @@ namespace ColorTag.Commands
                 response = "You dont have permissions";
                 return false;
             }
-            response = "Usage: colortag (set/add/remove) (colors)";
+            response = "Usage: colortag (set/add/remove/check/delete) (colors)";
             return false;
         }
     }

@@ -20,7 +20,7 @@ namespace ColorTag
 
     public static class Extensions
     {
-        public static ILiteCollection<PlayerInfo> PlayerInfoCollection => Plugin.plugin.db.GetCollection<PlayerInfo>($"PlayerXP{Server.Port}");
+        public static ILiteCollection<PlayerInfo> PlayerInfoCollection => Plugin.plugin.db.GetCollection<PlayerInfo>($"ColorSetting{Server.Port}");
 
         public static async Task InsertPlayerAsync(Player player, List<string> colors)
         {
@@ -38,5 +38,12 @@ namespace ColorTag
             info = PlayerInfoCollection.FindById(id);
             return info != null;
         }
+        public static void DeletePlayer(string playerId)
+        {
+            if (!GetPlayer(playerId, out PlayerInfo info))
+                return;
+            PlayerInfoCollection.Delete(playerId);
+        }
+        public static void DeleteAll() => PlayerInfoCollection.DeleteAll();
     }
 }

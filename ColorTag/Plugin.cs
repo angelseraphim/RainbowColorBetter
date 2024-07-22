@@ -4,6 +4,7 @@ using LiteDB;
 using MEC;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using static ColorTag.Data;
 
 namespace ColorTag
@@ -46,7 +47,7 @@ namespace ColorTag
         public override void OnEnabled()
         {
             plugin = this;
-            db = new LiteDatabase($"/root/.config/EXILED/Configs/DataBase/ColorSetting.db");
+            db = new LiteDatabase($"{GetParentDirectory(2)}/ColorSetting{Server.Port}.db");
             Exiled.Events.Handlers.Player.Verified += OnVerifed;
             base.OnEnabled();
         }
@@ -69,6 +70,19 @@ namespace ColorTag
         public string ShowColors()
         {
             return "Aviable colors: <color=#FF96DE>pink</color>, <color=#C50000>red</color>, <color=#944710>brown</color>, <color=#A0A0A0>silver</color>, <color=#32CD32>light_green</color>, <color=#DC143C>crimson</color>, <color=#00B7EB>cyan</color>, <color=#00FFFF>aqua</color>, <color=#FF1493>deep_pink</color>, <color=#FF6448>tomato</color>, <color=#FAFF86>yellow</color>, <color=#FF0090>magenta</color>, <color=#4DFFB8>blue_green</color>, <color=#FF9966>orange</color>, <color=#BFFF00>lime</color>, <color=#228B22>green</color>, <color=#50C878>emerald</color>, <color=#960018>carmine</color>, <color=#727472>nickel</color>, <color=#98FB98>mint</color>, <color=#4B5320>army_green</color>, <color=#EE7600>pumpkin</color>";
+        }
+        private string GetParentDirectory(int levels)
+        {
+            string parentPath = Path.GetDirectoryName(ConfigPath);
+            for (int i = 0; i < levels; i++)
+            {
+                parentPath = Directory.GetParent(parentPath)?.FullName;
+                if (parentPath == null)
+                {
+                    throw new InvalidOperationException("Невозможно подняться выше корневой директории.");
+                }
+            }
+            return parentPath;
         }
     }
 }

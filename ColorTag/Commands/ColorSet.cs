@@ -29,6 +29,11 @@ namespace ColorTag.Commands
                 response = "Usage: colortag set (colors)";
                 return false;
             }
+            if (arguments.Count > Plugin.plugin.Config.MaxColorLemit)
+            {
+                response = $"Max colors count: {Plugin.plugin.Config.MaxColorLemit}";
+                return false;
+            }
             for (int i = 0; i < arguments.Count; i++)
             {
                 if (!AvailableColors.Contains(arguments.At(i)))
