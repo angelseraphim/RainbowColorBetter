@@ -14,7 +14,7 @@ namespace ColorTag
         {
             [BsonId]
             public string ID { get; set; }
-            public List<string> colors { get; set; }
+            public List<string> colors { get; set; } 
         }
     }
 
