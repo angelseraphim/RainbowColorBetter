@@ -7,6 +7,7 @@ namespace ColorTag
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
+        public string DataPath { get; set; } = "%config%/%data%";
         public int MaxColorLimit { get; set; } = 5;
 
         [Description("Rights so that the player can change his colors")]

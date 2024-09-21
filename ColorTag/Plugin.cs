@@ -21,7 +21,7 @@ namespace ColorTag
             plugin = this;
             coroutines = new Coroutines();
             directory = new GetDirectory();
-            db = new LiteDatabase($"{directory.GetParentDirectory(2)}/ColorSetting{Server.Port}.db");
+            db = new LiteDatabase(Config.DataPath.Replace("%config%", directory.GetParentDirectory(2)).Replace("%data%", $"ColorSetting{Server.Port}.db"));
             Exiled.Events.Handlers.Player.Verified += OnVerifed;
             base.OnEnabled();
         }

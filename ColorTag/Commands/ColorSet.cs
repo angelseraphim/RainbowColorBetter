@@ -51,7 +51,7 @@ namespace ColorTag.Commands
             if (!Extensions.GetPlayer(player.UserId, out PlayerInfo info))
             {
                 Extensions.InsertPlayerAsync(player, colors);
-                response = $"Your colors added!\nColors: {Text}";
+                response = $"Your colors added!\nColor will be loaded in the next round\nColors: {Text}";
                 return true;
             }
             info.colors = colors;
