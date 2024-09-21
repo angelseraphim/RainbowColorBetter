@@ -41,7 +41,7 @@ namespace ColorTag
                 return;
             if (string.IsNullOrEmpty(ev.Player.GroupName))
                 return;
-
+            
             Timing.RunCoroutine(coroutines.ChangeColor(ev.Player));
         }
         public string ShowColors()
