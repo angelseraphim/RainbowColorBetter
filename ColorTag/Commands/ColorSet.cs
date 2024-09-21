@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using CommandSystem;
 using Exiled.API.Features;
+using Exiled.Permissions.Extensions;
 using static System.Net.Mime.MediaTypeNames;
 using static ColorTag.Data;
 
@@ -19,9 +20,9 @@ namespace ColorTag.Commands
             Player player = Player.Get(sender);
             string Text = string.Empty;
             List<string> colors = new List<string>();
-            if (!Plugin.plugin.Config.RequirGroups.Contains(player.GroupName))
+            if (!player.CheckPermission(Plugin.plugin.Config.ColorRequirePermission))
             {
-                response = "You dont have permissions";
+                response = $"You dont have permissions [{Plugin.plugin.Config.ColorRequirePermission}]";
                 return false;
             }
             if (arguments.Count < 2)
@@ -29,9 +30,9 @@ namespace ColorTag.Commands
                 response = "Usage: colortag set (colors)";
                 return false;
             }
-            if (arguments.Count > Plugin.plugin.Config.MaxColorLemit)
+            if (arguments.Count > Plugin.plugin.Config.MaxColorLimit)
             {
-                response = $"Max colors count: {Plugin.plugin.Config.MaxColorLemit}";
+                response = $"Max colors count: {Plugin.plugin.Config.MaxColorLimit}";
                 return false;
             }
             for (int i = 0; i < arguments.Count; i++)

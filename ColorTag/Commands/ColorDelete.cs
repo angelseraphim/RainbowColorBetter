@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using CommandSystem;
+using Exiled.API.Features;
+using Exiled.Permissions.Extensions;
 using static ColorTag.Data;
 
 namespace ColorTag.Commands
@@ -13,6 +15,12 @@ namespace ColorTag.Commands
         public bool SanitizeResponse => false;
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
+            Player player = Player.Get(sender);
+            if (!player.CheckPermission(Plugin.plugin.Config.AdminRequirePermission))
+            {
+                response = $"You dont have permissions [{Plugin.plugin.Config.AdminRequirePermission}]";
+                return false;
+            }
             if (arguments.Count != 1)
             {
                 response = "Using: colortag delete (UserID/all)";

@@ -1,5 +1,5 @@
 ﻿using Exiled.API.Interfaces;
-using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace ColorTag
 {
@@ -7,7 +7,12 @@ namespace ColorTag
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
-        public int MaxColorLemit { get; set; } = 5;
-        public List<string> RequirGroups { get; set; } = new List<string>() { "lvlB", "lvlC", "lvlD", "lvlE", "lvlW", "admin", "adminlvld", "glavb", "glav", "rukb", "ruk", "coo", "owner" };
+        public int MaxColorLimit { get; set; } = 5;
+
+        [Description("Rights so that the player can change his colors")]
+        public string ColorRequirePermission = "colortag.get";
+
+        [Description("Rights to remove colors from a player")]
+        public string AdminRequirePermission = "colortag.admin";
     }
 }

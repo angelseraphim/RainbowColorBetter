@@ -31,11 +31,6 @@ namespace ColorTag.Commands
         protected override bool ExecuteParent(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get(sender);
-            if (!Plugin.plugin.Config.RequirGroups.Contains(player.GroupName))
-            {
-                response = "You dont have permissions";
-                return false;
-            }
             response = "Usage: colortag (set/add/remove/check/delete) (colors)";
             return false;
         }
