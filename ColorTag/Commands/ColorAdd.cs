@@ -19,6 +19,7 @@ namespace ColorTag.Commands
         {
             Player player = Player.Get(sender);
             string Text = string.Empty;
+            List<string> colors = new List<string>();
             if (!player.CheckPermission(Plugin.plugin.Config.ColorRequirePermission))
             {
                 response = $"You dont have permissions [{Plugin.plugin.Config.ColorRequirePermission}]";
@@ -29,9 +30,9 @@ namespace ColorTag.Commands
                 response = "Your settings were not found, please use the (colortag set (colors)) command";
                 return false;
             }
-            if(info.colors.Count + arguments.Count > Plugin.plugin.Config.MaxColorLemit)
+            if(info.colors.Count + arguments.Count > Plugin.plugin.Config.MaxColorLimit)
             {
-                response = $"Max colors count: {Plugin.plugin.Config.MaxColorLemit}";
+                response = $"Max colors count: {Plugin.plugin.Config.MaxColorLimit}";
                 return false;
             }
             List<string> alreadyUsedColors = info.colors;
