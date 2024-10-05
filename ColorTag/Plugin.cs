@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Permissions.Extensions;
 using LiteDB;
 using MEC;
 using static ColorTag.Data;
@@ -40,6 +41,8 @@ namespace ColorTag
             if (!Extensions.GetPlayer(ev.Player.UserId, out PlayerInfo info))
                 return;
             if (string.IsNullOrEmpty(ev.Player.GroupName))
+                return;
+            if (!ev.Player.CheckPermission(Config.ColorRequirePermission))
                 return;
             
             Timing.RunCoroutine(coroutines.ChangeColor(ev.Player));
