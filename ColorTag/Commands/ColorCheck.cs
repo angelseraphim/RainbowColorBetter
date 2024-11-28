@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using CommandSystem;
-using Exiled.API.Features;
-using Exiled.Permissions.Extensions;
-using static ColorTag.Data;
-
-namespace ColorTag.Commands
+﻿namespace ColorTag.Commands
 {
+    using System;
+
+    using CommandSystem;
+
+    using Exiled.API.Features;
+    using Exiled.Permissions.Extensions;
+
+    using static ColorTag.Data;
+
     public class ColorCheck : ICommand
     {
         public string Command { get; } = "check";
@@ -18,7 +20,7 @@ namespace ColorTag.Commands
             Player player = Player.Get(sender);
             if (!player.CheckPermission(Plugin.plugin.Config.AdminRequirePermission))
             {
-                response = $"You dont have permissions [{Plugin.plugin.Config.AdminRequirePermission}]";
+                response = Plugin.plugin.Translation.DontHavePermissions.Replace("%permission%", Plugin.plugin.Config.AdminRequirePermission);
                 return false;
             }
             if (arguments.Count != 1)
@@ -26,13 +28,13 @@ namespace ColorTag.Commands
                 response = "Using: colortag check (UserID)";
                 return false;
             }
-            if (!Extensions.GetPlayer(arguments.At(0), out PlayerInfo info))
+            if (!Extensions.TryGetValue(arguments.At(0), out PlayerInfo info))
             {
-                response = "Player not found...";
+                response = Plugin.plugin.Translation.OtherNotFound;
                 return false;
             }
-            string Text = $"{info.ID}";
-            foreach(string s in info.colors)
+            string Text = $"{info.UserId}";
+            foreach(string s in info.Colors)
             {
                 Text += $"\n{s}";
             }

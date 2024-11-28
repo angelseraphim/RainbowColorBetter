@@ -1,8 +1,9 @@
-﻿using Exiled.API.Interfaces;
-using System.ComponentModel;
-
-namespace ColorTag
+﻿namespace ColorTag.Configs
 {
+    using System.ComponentModel;
+
+    using Exiled.API.Interfaces;
+
     public class Config : IConfig
     {
         public bool IsEnabled { get; set; } = true;
@@ -15,5 +16,9 @@ namespace ColorTag
 
         [Description("Rights to remove colors from a player")]
         public string AdminRequirePermission { get; set; } = "colortag.admin";
+        [Description("Rights to delete data base")]
+        public string DropDataRequirePermission { get; set; } = "colortag.kill";
+        [Description("Interval for color change")]
+        public float Interval { get; set; } = 1f;
     }
 }

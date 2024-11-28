@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using CommandSystem;
-using Exiled.API.Features;
-using Exiled.Permissions.Extensions;
-using static System.Net.Mime.MediaTypeNames;
-using static ColorTag.Data;
-
-namespace ColorTag.Commands
+﻿namespace ColorTag.Commands
 {
+    using System;
+    using System.Collections.Generic;
+
+    using CommandSystem;
+
+    using Exiled.API.Features;
+    using Exiled.Permissions.Extensions;
+
+    using static ColorTag.Data;
+
     public class ColorAdd : ICommand
     {
         public string Command { get; } = "add";
         public string[] Aliases { get; } = { };
-        public string Description { get; } = "add color";
+        public string Description { get; } = "Add color";
         public bool SanitizeResponse => false;
-        private List<string> AvailableColors = new List<string>() { "pink", "red", "brown", "silver", "light_green", "crimson", "cyan", "aqua", "deep_pink", "tomato", "yellow", "magenta", "blue_green", "orange", "lime", "green", "emerald", "carmine", "nickel", "mint", "army_green", "pumpkin" };
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get(sender);
@@ -22,29 +23,31 @@ namespace ColorTag.Commands
             List<string> colors = new List<string>();
             if (!player.CheckPermission(Plugin.plugin.Config.ColorRequirePermission))
             {
-                response = $"You dont have permissions [{Plugin.plugin.Config.ColorRequirePermission}]";
+                response = Plugin.plugin.Translation.DontHavePermissions.Replace("%permission%", Plugin.plugin.Config.ColorRequirePermission);
                 return false;
             }
-            if (!Extensions.GetPlayer(player.UserId, out PlayerInfo info))
+            if (!Extensions.TryGetValue(player.UserId, out PlayerInfo info))
             {
-                response = "Your settings were not found, please use the (colortag set (colors)) command";
+                response = Plugin.plugin.Translation.NotFoundInDataBase;
                 return false;
             }
-            if(info.colors.Count + arguments.Count > Plugin.plugin.Config.MaxColorLimit)
+            if(info.Colors.Count + arguments.Count > Plugin.plugin.Config.MaxColorLimit)
             {
-                response = $"Max colors count: {Plugin.plugin.Config.MaxColorLimit}";
+                response = Plugin.plugin.Translation.ColorLimit.Replace("%limit%", Plugin.plugin.Config.MaxColorLimit.ToString());
                 return false;
             }
-            List<string> alreadyUsedColors = info.colors;
-            for (int i = 0; i < arguments.Count; i++)
+            List<string> alreadyUsedColors = info.Colors;
+
+            foreach (string arg in arguments)
             {
-                if (!AvailableColors.Contains(arguments.At(i)))
+                if (!Plugin.plugin.AvailableColors.ContainsKey(arg))
                 {
-                    response = $"Invalid color!\n{arguments.At(i)} cant be added\n{Plugin.plugin.ShowColors()}";
+                    response = Plugin.plugin.Translation.InvalidColor.Replace("%arg%", arg).Replace("%colors%", Plugin.plugin.ShowColors());
                     return false;
                 }
-                colors.Add(arguments.At(i));
+                colors.Add(arg);
             }
+
             foreach (var s in colors)
             {
                 alreadyUsedColors.Add(s);
@@ -53,9 +56,9 @@ namespace ColorTag.Commands
             {
                 Text += $"{s} ";
             }
-            info.colors = alreadyUsedColors;
+            info.Colors = alreadyUsedColors;
             Extensions.PlayerInfoCollection.Update(info);
-            response = $"Your colors updated!\nColors: {Text}";
+            response = Plugin.plugin.Translation.Successfull.Replace("%current%", Text);
             return true;
         }
     }

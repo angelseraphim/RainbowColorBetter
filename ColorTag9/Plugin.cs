@@ -1,28 +1,60 @@
-﻿using Exiled.API.Features;
-using Exiled.Events.EventArgs.Player;
-using Exiled.Permissions.Extensions;
-using LiteDB;
-using MEC;
-using static ColorTag.Data;
-
-namespace ColorTag
+﻿namespace ColorTag
 {
-    public class Plugin : Plugin<Config>
+    using ColorTag.Configs;
+
+    using Exiled.API.Features;
+    using Exiled.Events.EventArgs.Player;
+    using Exiled.Permissions.Extensions;
+
+    using LiteDB;
+
+    using MEC;
+    using System.Collections.Generic;
+
+    public class Plugin : Plugin<Config, Translation>
     {
         public override string Prefix => "ColorTag";
         public override string Name => "ColorTag";
         public override string Author => "angelseraphim.";
+
+        public readonly Dictionary<string, string> AvailableColors = new Dictionary<string, string>() 
+        {
+            {"pink", "#FF96DE"},
+            {"red", "#C50000"},
+            {"brown", "#944710"},
+            {"silver", "#A0A0A0"},
+            {"light_green", "#32CD32"},
+            {"crimson", "#DC143C"},
+            {"cyan", "#00B7EB"},
+            {"aqua", "#00FFFF"},
+            {"deep_pink", "#FF1493"},
+            {"tomato", "#FF6448"},
+            {"yellow", "#FAFF86"},
+            {"magenta", "#FF0090"},
+            {"blue_green", "#4DFFB8"},
+            {"orange", "#FF9966"},
+            {"lime", "#BFFF00"},
+            {"green", "#228B22"},
+            {"emerald", "#50C878"},
+            {"carmine", "#960018"},
+            {"nickel", "#727472"},
+            {"mint", "#98FB98"},
+            {"army_green", "#4B5320"},
+            {"pumpkin", "#EE7600"}
+        };
+
         public static Plugin plugin;
         public static Coroutines coroutines;
         public static GetDirectory directory;
-        public LiteDatabase db { get; set; }
+        public static LiteDatabase database;
 
         public override void OnEnabled()
         {
             plugin = this;
             coroutines = new Coroutines();
             directory = new GetDirectory();
-            db = new LiteDatabase(Config.DataPath.Replace("%config%", directory.GetParentDirectory(2)).Replace("%data%", $"ColorSetting{Server.Port}.db"));
+            database = new LiteDatabase(Config.DataPath.Replace("%config%", directory.GetParentDirectory(2)).Replace("%data%", $"ColorSetting{Server.Port}.db"));
+            
             Exiled.Events.Handlers.Player.Verified += OnVerifed;
             base.OnEnabled();
         }
@@ -31,14 +63,15 @@ namespace ColorTag
             plugin = null;
             coroutines = null;
             directory = null;
-            db.Dispose();
-            db = null;
+            database.Dispose();
+            database = null;
+
             Exiled.Events.Handlers.Player.Verified -= OnVerifed;
             base.OnDisabled();
         }
         private void OnVerifed(VerifiedEventArgs ev)
         {
-            if (!Extensions.GetPlayer(ev.Player.UserId, out PlayerInfo info))
+            if (!Extensions.Contains(ev.Player.UserId))
                 return;
             if (string.IsNullOrEmpty(ev.Player.GroupName))
                 return;
@@ -49,7 +82,12 @@ namespace ColorTag
         }
         public string ShowColors()
         {
-            return "Aviable colors: <color=#FF96DE>pink</color>, <color=#C50000>red</color>, <color=#944710>brown</color>, <color=#A0A0A0>silver</color>, <color=#32CD32>light_green</color>, <color=#DC143C>crimson</color>, <color=#00B7EB>cyan</color>, <color=#00FFFF>aqua</color>, <color=#FF1493>deep_pink</color>, <color=#FF6448>tomato</color>, <color=#FAFF86>yellow</color>, <color=#FF0090>magenta</color>, <color=#4DFFB8>blue_green</color>, <color=#FF9966>orange</color>, <color=#BFFF00>lime</color>, <color=#228B22>green</color>, <color=#50C878>emerald</color>, <color=#960018>carmine</color>, <color=#727472>nickel</color>, <color=#98FB98>mint</color>, <color=#4B5320>army_green</color>, <color=#EE7600>pumpkin</color>";
+            string content = string.Empty;
+            foreach (var colors in AvailableColors)
+            {
+                content += $"<color={colors.Value}>{colors.Key}</color>" + "," + " ";
+            }
+            return $"Aviable colors: {content}";
         }
     }
 }

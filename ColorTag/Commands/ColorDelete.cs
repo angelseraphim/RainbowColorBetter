@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using CommandSystem;
-using Exiled.API.Features;
-using Exiled.Permissions.Extensions;
-using static ColorTag.Data;
-
-namespace ColorTag.Commands
+﻿namespace ColorTag.Commands
 {
+    using System;
+
+    using CommandSystem;
+
+    using Exiled.API.Features;
+    using Exiled.Permissions.Extensions;
+
+    using static ColorTag.Data;
+
     public class ColorDelete : ICommand
     {
         public string Command { get; } = "delete";
@@ -16,30 +18,38 @@ namespace ColorTag.Commands
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Player player = Player.Get(sender);
+
             if (!player.CheckPermission(Plugin.plugin.Config.AdminRequirePermission))
             {
-                response = $"You dont have permissions [{Plugin.plugin.Config.AdminRequirePermission}]";
+                response = Plugin.plugin.Translation.DontHavePermissions.Replace("%permission%", Plugin.plugin.Config.AdminRequirePermission);
                 return false;
             }
+
             if (arguments.Count != 1)
             {
                 response = "Using: colortag delete (UserID/all)";
                 return false;
             }
+
             switch (arguments.At(0))
             {
                 case "all":
+                    if (!player.CheckPermission(Plugin.plugin.Config.DropDataRequirePermission))
+                    {
+                        response = Plugin.plugin.Translation.DontHavePermissions.Replace("%permission%", Plugin.plugin.Config.DropDataRequirePermission);
+                        return false;
+                    }
                     Extensions.DeleteAll();
-                    response = "Date base has been killed";
+                    response = Plugin.plugin.Translation.KillDataBase;
                     return true;
                 default:
-                    if (!Extensions.GetPlayer(arguments.At(0), out PlayerInfo info))
+                    if (!Extensions.TryGetValue(arguments.At(0), out PlayerInfo info))
                     {
-                        response = "Player not found...";
+                        response = Plugin.plugin.Translation.OtherNotFound;
                         return false;
                     }
                     Extensions.DeletePlayer(arguments.At(0));
-                    response = $"Player with ID {arguments.At(0)} has been deleted";
+                    response = Plugin.plugin.Translation.SuccessfullDeleted.Replace("%userid%", arguments.At(0));
                     return true;
             }
         }

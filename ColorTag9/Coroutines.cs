@@ -1,35 +1,33 @@
-﻿using Exiled.API.Features;
-using MEC;
-using System;
-using System.Collections.Generic;
-using static ColorTag.Data;
-
-namespace ColorTag
+﻿namespace ColorTag
 {
+    using System.Collections.Generic;
+
+    using Exiled.API.Features;
+
+    using MEC;
+
+    using static ColorTag.Data;
+
     public class Coroutines
     {
         public IEnumerator<float> ChangeColor(Player player)
         {
-            int NowColor = 0;
+            int currentIndex = 0;
+
             while (player.IsConnected)
             {
-                yield return Timing.WaitForSeconds(1f);
-                try
+                yield return Timing.WaitForSeconds(Plugin.plugin.Config.Interval);
+
+                if (!Extensions.TryGetValue(player.UserId, out PlayerInfo info))
+                    break;
+
+                if (currentIndex >= info.Colors.Count)
                 {
-                    if (!Extensions.GetPlayer(player.UserId, out PlayerInfo info))
-                        continue;
-                    player.RankColor = info.colors[NowColor];
-                    if (info.colors.Count - 1 > NowColor)
-                    {
-                        NowColor++;
-                        continue;
-                    }
-                    NowColor = 0;
+                    currentIndex = 0;
                 }
-                catch (Exception ex)
-                {
-                    NowColor = 0;
-                }
+
+                player.RankColor = info.Colors[currentIndex];
+                currentIndex++;
             }
             yield break;
         }

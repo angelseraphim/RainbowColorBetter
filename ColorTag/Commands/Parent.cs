@@ -1,9 +1,11 @@
-﻿using System;
-using CommandSystem;
-using Exiled.API.Features;
-
-namespace ColorTag.Commands
+﻿namespace ColorTag.Commands
 {
+    using System;
+
+    using CommandSystem;
+
+    using Exiled.API.Features;
+
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     class Parent : ParentCommand
     {

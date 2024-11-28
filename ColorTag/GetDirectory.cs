@@ -1,8 +1,8 @@
-﻿using System;
-using System.IO;
-
-namespace ColorTag
+﻿namespace ColorTag
 {
+    using System;
+    using System.IO;
+
     public class GetDirectory
     {
         public string GetParentDirectory(int levels)

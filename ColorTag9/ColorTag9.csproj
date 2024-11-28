@@ -105,7 +105,8 @@
     <Compile Include="Commands\ColorSet.cs" />
     <Compile Include="Commands\Constructor.cs" />
     <Compile Include="Commands\Parent.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="Configs\Config.cs" />
+    <Compile Include="Configs\Translation.cs" />
     <Compile Include="Coroutines.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="GetDirectory.cs" />
