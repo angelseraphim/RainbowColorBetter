@@ -31,11 +31,19 @@
                 response = Plugin.plugin.Translation.NotFoundInDataBase;
                 return false;
             }
-            if(info.Colors.Count + arguments.Count > Plugin.plugin.Config.MaxColorLimit)
+
+            int count = arguments.Count;
+            if (Plugin.plugin.Config.GroupColorLimit.TryGetValue(player.GroupName, out int limit) && count > limit)
             {
-                response = Plugin.plugin.Translation.ColorLimit.Replace("%limit%", Plugin.plugin.Config.MaxColorLimit.ToString());
+                response = Plugin.plugin.Translation.ColorLimit.Replace("%limit%", limit.ToString());
                 return false;
             }
+            else if (count > Plugin.plugin.Config.DefaultColorLimit)
+            {
+                response = Plugin.plugin.Translation.ColorLimit.Replace("%limit%", Plugin.plugin.Config.DefaultColorLimit.ToString());
+                return false;
+            }
+
             List<string> alreadyUsedColors = info.Colors;
 
             foreach (string arg in arguments)
