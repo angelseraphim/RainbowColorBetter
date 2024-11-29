@@ -33,10 +33,13 @@
             }
 
             int count = arguments.Count;
-            if (Plugin.plugin.Config.GroupColorLimit.TryGetValue(player.GroupName, out int limit) && count > limit)
+            if (Plugin.plugin.Config.GroupColorLimit.TryGetValue(player.GroupName, out int limit))
             {
-                response = Plugin.plugin.Translation.ColorLimit.Replace("%limit%", limit.ToString());
-                return false;
+                if (count > limit)
+                {
+                    response = Plugin.plugin.Translation.ColorLimit.Replace("%limit%", limit.ToString());
+                    return false;
+                }
             }
             else if (count > Plugin.plugin.Config.DefaultColorLimit)
             {
